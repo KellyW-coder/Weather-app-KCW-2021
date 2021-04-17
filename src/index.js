@@ -1,15 +1,3 @@
-function search(event) {
-  event.preventDefault();
-  let searchInput = document.querySelector("#city-input");
-
-  console.log(searchInput.value);
-  let h2 = document.querySelector("h2");
-  h2.innerHTML = `${searchInput.value}`;
-}
-let form = document.querySelector("#city-search");
-
-form.addEventListener("submit", search);
-
 //Date-time
 //Time and date
 let currentDate = new Date();
@@ -37,6 +25,22 @@ let day = days[currentDate.getDay()];
 
 gap.innerHTML = `${day} | ${hours}:${minutes}`;
 
+//Search city
+function search(event) {
+  event.preventDefault();
+  let searchInput = document.querySelector("#city-input");
+
+  console.log(searchInput.value);
+  let h2 = document.querySelector("h2");
+  h2.innerHTML = `${searchInput.value}`;
+  let apiKey = "3ae6bdb32a731d95f7ea1efdd218128c";
+  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${searchInput.value}&appid=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(showCurrentTemperature);
+}
+let form = document.querySelector("#city-search");
+
+form.addEventListener("submit", search);
+
 //degrees
 function convertToFarenheit(event) {
   event.preventDefault();
@@ -58,12 +62,14 @@ farenheitLink.addEventListener("click", convertToFarenheit);
 let celciusLink = document.querySelector("#celcius-link");
 celciusLink.addEventListener("click", convertToCelcius);
 
+//temperature
 //location and weather
 function showCurrentTemperature(response) {
   let city = response.data.name;
   let temperature = Math.round(response.data.main.temp);
   let tempDipslay = document.querySelector("#temperature");
   tempDipslay.innerHTML = `${temperature}`;
+
   let currentCity = document.querySelector("h2");
   currentCity.innerHTML = `${city}`;
 }
